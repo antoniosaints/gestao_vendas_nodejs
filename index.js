@@ -23,14 +23,17 @@ app.get("/", (_, res) => {
 });
 
 app.get("/teste", (_, res) => {
-  res.render("teste", {
+  res.render("mercadopago/teste", {
     title: "Tela de teste",
     message: "top demais",
   })
 });
 
-app.get("/status", (_, res) => {
-  res.render("resultado");
+app.get("/status", (req, res) => {
+  const id = req.query.id;
+  res.render("mercadopago/resultado", {
+    paymentIdController: id,
+  });
 });
 
 app.post("/webhook", gerenciaPagamentoWebhook);

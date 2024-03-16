@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>    
+  <head>
     <meta charset="UTF-8" />
     <title>Status Screen</title>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
@@ -12,22 +12,25 @@
       }
     </style>
     <div id="statusScreenBrick_container"></div>
+    <input type="hidden" value="<%= paymentIdController %>" id="paymentIdController">
     <script>
+      const idPayment = document.getElementById('paymentIdController').value;
       const mp = new MercadoPago('APP_USR-6bd9cc62-5be2-460f-b62e-95f709f4cb1a', { // Add your public key credential
         locale: 'pt-BR'
       });
       const bricksBuilder = mp.bricks();
       const renderStatusScreenBrick = async (bricksBuilder) => {
+
         const settings = {
           initialization: {
-            paymentId: '74121318933', // Payment identifier, from which the status will be checked
+            paymentId: idPayment, // Payment identifier, from which the status will be checked
           },
           customization: {
             visual: {
               hideStatusDetails: true,
               hideTransactionDate: true,
               style: {
-                theme: 'flat', // 'default' | 'dark' | 'bootstrap' | 'flat'
+                theme: 'default', // 'default' | 'dark' | 'bootstrap' | 'flat'
               }
             },
             backUrls: {
@@ -49,4 +52,4 @@
       renderStatusScreenBrick(bricksBuilder);
     </script>
   </body>
-  </html>
+</html>
