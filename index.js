@@ -3,8 +3,6 @@ import "dotenv/config";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-import { createPreference } from "./src/Controllers/Gateways/Mercadopago/Preference.js";
-import { gerenciaPagamentoWebhook } from "./src/Controllers/Gateways/Mercadopago/Webhook.js";
 import router from "./src/Routes/Router.js";
 
 const app = express();
@@ -17,27 +15,6 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src", "views"));
 app.use(express.json());
 
-// Rotas
-app.get("/", (_, res) => {
-  res.render("index");
-});
-
-app.get("/teste", (_, res) => {
-  res.render("mercadopago/teste", {
-    title: "Tela de teste",
-    message: "top demais",
-  })
-});
-
-app.get("/status", (req, res) => {
-  const id = req.query.id;
-  res.render("mercadopago/resultado", {
-    paymentIdController: id,
-  });
-});
-
-app.post("/webhook", gerenciaPagamentoWebhook);
-app.post("/createPreference", createPreference);
 app.use(router);
 
 // Inicialização do servidor

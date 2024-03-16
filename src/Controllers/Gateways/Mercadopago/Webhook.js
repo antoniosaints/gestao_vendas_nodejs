@@ -1,6 +1,8 @@
 const gerenciaPagamentoWebhook = (req, res) => {
     console.log("Webhook");
-    res.json(req.body);
+    res.json({
+        status: 200
+    });
 }
 
 export {
