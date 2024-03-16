@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <select required id="produto">
+      <option value="">Escolha o produto</option>
+      <option value="1">Licensa 01</option>
+      <option value="2">Licensa 02</option>
+    </select>
+
+    <div style="max-width: max-content" hidden id="walletBrick_container"></div>
+    <script>
+      const produto = document.getElementById("produto");;
+      const sendData = () => {
+        if (produto.value != "") {
+          console.log(produto.value);
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      const plano = document.getElementById("produto");
+      plano.addEventListener("change", () => {
+        if (sendData()) {
+          document.getElementById("walletBrick_container").hidden = false;
+        }else {
+          document.getElementById("walletBrick_container").hidden = true;
+        }
+      });
+
+      const mp = new MercadoPago(
+        "APP_USR-6bd9cc62-5be2-460f-b62e-95f709f4cb1a",
+        // "TEST-0678ca39-fa66-4bba-b6e3-e614405859dc",
+        {
+          locale: "pt-BR",
+        }
+      );
+      const bricksBuilder = mp.bricks();
+      const renderWalletBrick = async (bricksBuilder) => {
+        const settings = {
+          initialization: {
+            redirectMode: "modal",
+          },
+          customization: {
+            texts: {
+              action: "pay",
+              valueProp: "smart_option",
+            },
+            visual: {
+              hideValueProp: false,
+              buttonBackground: "black", // default, black, blue, white
+              valuePropColor: "grey", // grey, white
+              buttonHeight: "51px", // min 48px - max free
+              borderRadius: "6px",
+              verticalPadding: "16px", // min 16px - max free
+              horizontalPadding: "0px", // min 0px - max free
+            },
+            checkout: {
+              theme: {
+                elementsColor: "#4287F5", // color hex code
+                headerColor: "#4287F5", // color hex code
+              },
+            },
+          },
+          callbacks: {
+            onReady: () => {},
+            onSubmit: () => {
+              return new Promise(async (resolve, reject) => {
+                fetch("/createPreference", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    products: [1],
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((response) => resolve(response.id))
+                  .catch((error) => reject());
+              });
+            },
+          },
+        };
+        window.walletBrickController = await bricksBuilder.create(
+          "wallet",
+          "walletBrick_container",
+          settings
+        );
+      };
+      renderWalletBrick(bricksBuilder);
+    </script>
+  </body>
+</html>

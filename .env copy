@@ -1,0 +1,6 @@
+#API MercadoPago - Produção
+APIMERCADOPAGO=
+#API MercadoPago - Dev
+#APIMERCADOPAGO=
+PORT=3001
+URLMERCADOPAGOAPI=https://api.mercadopago.com/v1/payments
