@@ -1,5 +1,32 @@
 <%- include("partials/header"); %>
+<script type="module">
+  import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
+  const valor = document.getElementById("valor");
 
+  const socket = io("http://localhost:3001", {
+    autoConnect: false,
+  });
+
+  socket.connect();
+
+  socket.on("update.payment", (data) => {
+    console.log(data);
+    valor.innerText = Number(valor.innerText) + 1;
+  });
+
+  socket.on("disconnect", () => {
+    console.log("disconnected");
+    socket.connect();
+  });
+
+  document.querySelector("#emitirPagamento").addEventListener("click", () => {
+    socket.emit("pagamentos", "R$29,90");
+  });
+
+  socket.on("connect_error", (err) => {
+    console.log(err);
+  });
+</script>
 <div
   class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
 >
@@ -19,37 +46,17 @@
       </h5>
     </a>
     <div class="flex items-center mt-2 justify-between">
-      <span class="text-2xl font-bold text-gray-900 dark:text-white">$599</span>
+      <span class="text-2xl font-bold text-gray-900 dark:text-white" id="valor"
+        >0</span
+      >
       <a
-        href="#"
+        id="emitirPagamento"
+        href="javascript:void(0)"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >Comprar</a
+        >Adicionar</a
       >
     </div>
   </div>
 </div>
 
-<script type="module">
-  import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
-
-  const socket = io("http://localhost:3001", {
-    autoConnect: false,
-  });
-
-  socket.connect();
-
-  socket.on("message", (data) => {
-    console.log(data);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("disconnected");
-    socket.connect();
-  });
-
-  socket.emit("pagamentos", "R$29,90");
-  socket.on("connect_error", (err) => {
-    console.log(err);
-  });
-</script>
 <%- include("partials/footer"); %>

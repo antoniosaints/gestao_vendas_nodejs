@@ -30,13 +30,13 @@ app.use(rotas_api).use(rotas_web);
 
 // WS
 io.on('connection', (socket) => {
-  console.log('Conectado');
+  console.log('Servidor WebSocker conectado');
   socket.on('disconnect', () => {
     console.log('Desconectado');
-  })
+  });
   socket.on("pagamentos", (msg) => {
-    io.emit("message", msg);
-  })
+    io.emit("update.payment", msg);
+  });
 });
 
 // Inicialização do servidor
