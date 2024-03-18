@@ -5,14 +5,13 @@ import path from "path";
 import { fileURLToPath } from "url";
 import rotas_api from "./src/Routes/api.js";
 import rotas_web from "./src/Routes/web.js";
+import startWebSocketServer from "./src/Services/Websocket.js";
 
 // Configuração do servidor WS
 import { createServer } from "http"
-import { Server } from "socket.io"
-
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+startWebSocketServer(server);
 
 // Configuração de rotas das pastas
 const __filename = fileURLToPath(import.meta.url);
@@ -27,17 +26,6 @@ app.use(express.static(path.join(__dirname, "src", "assets")));
 
 // Rotas API
 app.use(rotas_api).use(rotas_web);
-
-// WS
-io.on('connection', (socket) => {
-  console.log('Servidor WebSocker conectado');
-  socket.on('disconnect', () => {
-    console.log('Desconectado');
-  });
-  socket.on("pagamentos", (msg) => {
-    io.emit("update.payment", msg);
-  });
-});
 
 // Inicialização do servidor
 const PORT = process.env.PORT || 3000;

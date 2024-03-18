@@ -11,7 +11,7 @@
 
   socket.on("update.payment", (data) => {
     console.log(data);
-    valor.innerText = Number(valor.innerText) + 1;
+    valor.innerText = Number(valor.innerText) + Number(data);
   });
 
   socket.on("disconnect", () => {
