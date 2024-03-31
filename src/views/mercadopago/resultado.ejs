@@ -1,55 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Status Screen</title>
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
-  </head>
-  <body>
-    <style>
-      * {
-        font-family: Arial, Helvetica, sans-serif;
-      }
-    </style>
-    <div id="statusScreenBrick_container"></div>
-    <input type="hidden" value="<%= paymentIdController %>" id="paymentIdController">
-    <script>
-      const idPayment = document.getElementById('paymentIdController').value;
-      const mp = new MercadoPago('APP_USR-6bd9cc62-5be2-460f-b62e-95f709f4cb1a', { // Add your public key credential
-        locale: 'pt-BR'
-      });
-      const bricksBuilder = mp.bricks();
-      const renderStatusScreenBrick = async (bricksBuilder) => {
 
-        const settings = {
-          initialization: {
-            paymentId: idPayment, // Payment identifier, from which the status will be checked
-          },
-          customization: {
-            visual: {
-              hideStatusDetails: true,
-              hideTransactionDate: true,
-              style: {
-                theme: 'default', // 'default' | 'dark' | 'bootstrap' | 'flat'
-              }
-            },
-            backUrls: {
-              'error': 'http://localhost:3001/',
-              'return': 'http://localhost:3001/'
+<head>
+  <meta charset="UTF-8" />
+  <title>Status Screen</title>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+
+<body>
+  <style>
+    * {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  </style>
+  <div id="statusScreenBrick_container"></div>
+  <input type="hidden" value="<%= paymentIdController %>" id="paymentIdController">
+  <script>
+    const idPayment = document.getElementById('paymentIdController').value;
+    const mp = new MercadoPago('APP_USR-6bd9cc62-5be2-460f-b62e-95f709f4cb1a', { // Add your public key credential
+      locale: 'pt-BR'
+    });
+    const bricksBuilder = mp.bricks();
+    const renderStatusScreenBrick = async (bricksBuilder) => {
+
+      const settings = {
+        initialization: {
+          paymentId: idPayment, // Payment identifier, from which the status will be checked
+        },
+        customization: {
+          visual: {
+            hideStatusDetails: true,
+            hideTransactionDate: true,
+            style: {
+              theme: 'default', // 'default' | 'dark' | 'bootstrap' | 'flat'
             }
           },
-          callbacks: {
-            onReady: () => {
-              // Callback called when Brick is ready
-            },
-            onError: (error) => {
-              // Callback called for all Brick error cases
-            },
+          backUrls: {
+            'error': 'http://localhost:3001/',
+            'return': 'http://localhost:3001/'
+          }
+        },
+        callbacks: {
+          onReady: () => {
+            // Callback called when Brick is ready
           },
-        };
-        window.statusScreenBrickController = await bricksBuilder.create('statusScreen', 'statusScreenBrick_container', settings);
+          onError: (error) => {
+            // Callback called for all Brick error cases
+          },
+        },
       };
-      renderStatusScreenBrick(bricksBuilder);
-    </script>
-  </body>
+      window.statusScreenBrickController = await bricksBuilder.create('statusScreen', 'statusScreenBrick_container', settings);
+    };
+    renderStatusScreenBrick(bricksBuilder);
+  </script>
+</body>
+
 </html>

@@ -75,9 +75,6 @@ const cancelPayment = async (req, res) => {
   payment
     .cancel({
       id: idPayment,
-      requestOptions: {
-        idempotencyKey: "<IDEMPOTENCY_KEY>",
-      },
     })
     .then(
       ({
@@ -139,4 +136,10 @@ const statusPayment = async (req, res) => {
   });
 };
 
-export { createPayment, getPayment, cancelPayment, refoundPayment, statusPayment };
+export {
+  createPayment,
+  getPayment,
+  cancelPayment,
+  refoundPayment,
+  statusPayment,
+};
